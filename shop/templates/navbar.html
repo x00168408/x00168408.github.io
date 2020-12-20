@@ -1,0 +1,50 @@
+<script>
+    function darkMode() {
+        var element = document.body;
+        element.classList.toggle("dark_mode");
+    }
+    </script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<nav class="navbar navbar-expand-sm bg-dark navbar-fixed-top">
+    <a href="{% url 'shop:allProdCat' %}">
+        <img style="width: 50px;" class="homelogo" src="../../../../static/images/LyrifyLogo.png">
+    </a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link text-light" href="{% url 'shop:allProdCat' %}">Home</a>
+        </li>
+        <li class="nav-item">
+            <button onclick="darkMode()"><i class="fas fa-moon"></i></button>
+        </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <div class="my_custom_menu">
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown btn">
+                    <a class="nav-link dropdown-toggle text-light" href="" id="navbardrop" data-toggle="dropdown">{{ user.username }} <i class="fas fa-user-circle"></i></a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="{% url 'order:order_history' %}">Order History</a>
+                      <a class="dropdown-item" href="{% url 'signout' %}">Sign Out</a>
+                    </div>
+                  </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="text-light" href="{% url 'signup' %}">Sign Up <i class="fas fa-user-plus"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="text-light" href="{% url 'signin' %}">Sign In <i class="fas fa-sign-in-alt"></i></a>
+                </li>
+                {% endif %}
+            </div>
+            <form class="form-inline mt-2 mt-md-0 ml-2" action="{% url 'search_app:searchResult'%}" method="get">
+                {% csrf_token %}
+                <input name="q" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm0" type="submit">Search</button>
+            </form>
+            {% if item_count > 0 %}
+                <li class="nav-item btn">
+                    <a class="nav-link text-light" href="{% url 'cart:cart_detail' %}"><i class="fas fa-shopping-cart text-light"></i>({{item_count}})</a>
+                </li>
+            {% endif %} 
+        </ul>
+</nav>

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to the Lyrify Album store, Where album shopping is made easy.
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{ category.name }} - Lyrify Album Store
+    {% else %}
+        Lyrify Album Store
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if category %}
+        <div class="row row_class">
+            <div class="mx-auto">
+                <p><a href="{% url 'shop:allProdCat' %}">Album Collection</a> | {{ category.name }}</p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="mx-auto">
+    {% if category %}
+        <img class="image_class" src="{{ category.image.url }}" alt="{{ category.name }}">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center title_class">{{ category.name }}</h1>
+        <p class="text-justify">{{ category.description }}</p>
+    </div>
+    {% else %}
+    <br>
+    <div>
+        <div class="mt-2">
+            <h1 class="text-center">Hundreds of albums at your fingertips</h1>
+            <p class="text-justify text-center">From Metal to classic, and Pop to Reggae, at Lyrify we strive to provide you with 
+                the widest range of music albums on the planet. We have music from the most mainstream artists and the
+                most obscure. Want to support the creators you buy from? Do it with us! we charge the smallest commission fee
+                on the market, making us a very promising choice for aspiring musicians wanting to make some money off their work!
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="container">
+        <div class="row mx-auto">
+            {% for product in products %}
+                <div class="col-9 col-lg-6 col-sm-12 col-md-4 mt-2">
+                    <div class="card text-center">
+                        <a href="{{product.get_absolute_url}}"><img id="display-images" style="width: 250px;" class="card-img-top" src="{{product.image_thumbnail.url}}" alt="{{product.name}}"></a>
+                        <div class="card-body">
+                            <h4>{{product.name}}</h4>
+                            <h5>{{product.artist}}</h5>
+                            <p>€{{product.price}}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class='mx-auto'>
+            {% if products.paginator.num_pages > 1 %}
+                <hr>
+                <div class="text-center">
+                    {% for pg in products.paginator.page_range %}
+                        <a href="?page={{pg}}" class="btn btn-light btn-sm
+                            {% if products.number == pg %}active{% endif %}">{{pg}}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+</div>
+{% endblock %}

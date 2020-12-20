@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% block metadescription %}
+	{{ product.description|truncatewords:155 }}
+{% endblock %}
+{% block title %}
+	{{ product.name }} - Lyrify Album Store
+{% endblock %}
+{% block content %}
+<div class = "row prod_row_class">
+    <div class ="mx-auto">
+        <p><a href="{% url 'shop:allProdCat' %}">Home</a> | <a href="{{ product.category.get_absolute_url }}">{{product.category}}</a> | {{product.name}}</p>
+    </div>
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+                <div style="min-width: 18rem;">
+                    <img src="{{product.image_thumbnail.url}}" style="width: 450px;" alt="{{product.name}}">
+                </div>
+            </div>
+            <div class ="col-12 col-sm-12 col-md-12 col-lg-6">
+                <div>
+                    <h1 class="prod_title">{{product.name}}</h1>
+                    <h3>{{product.artist}}</h3><hr>
+                    <p class="font-weight-bold title_class">Released</p>
+                    <p>{{product.released}}</p>
+                    <p class = "font-weight-bold title_class">Product Description</p>
+                    {% if product.description %}
+                        <p class = "text-justify prod_text">{{product.description}}</p>
+                    {% else %}
+                        <p>No Product Description Available</p>
+                    {% endif %}
+                    <p class="font-weight-bold title_class">Product Price</p>
+                    <p>€{{product.price}}</p>
+                    {% if product.stock == 0 %}
+                        <h6 class="text-justify prod_text"><b>Out of Stock</b></h6>
+                    {% else %}
+                        {% if user.is_authenticated %}
+                            <a class = "btn btn-secondary" href="{% url 'cart:add_cart' product.id %}">Add to Cart</a>
+                        {% else %}
+                            <h6 class="text-justify prod_text">Log in to Add Item to cart</h6>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="text-center">
+                    {% if product.songs %}
+                        <h4 class="font-weight-bold title_class">Album Song list</h4>
+                        <p>{{product.songs}}</p>
+                    {% else %}
+                        <p>No Song list available for this Album</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
